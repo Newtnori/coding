@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorful Falling Balls</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  .ball {
+    position: absolute;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
+</style>
+</head>
+<body>
+
+<script>
+const colors = ["#ff5733", "#33ff57", "#3357ff", "#f0e68c", "#ff69b4"];
+const balls = [];
+
+// Create balls
+function createBalls() {
+  for (let i = 0; i < 50; i++) {
+    const ball = document.createElement("div");
+    ball.classList.add("ball");
+    ball.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    ball.style.left = `${Math.random() * window.innerWidth}px`;
+    ball.style.top = `${Math.random() * -window.innerHeight}px`;
+    document.body.appendChild(ball);
+    balls.push(ball);
+
+    // Animate falling and stopping at a random position
+    ball.animate(
+      [{ top: ball.style.top }, { top: `${Math.random() * window.innerHeight}px` }],
+      {
+        duration: 2000 + Math.random() * 2000,
+        fill: "forwards",
+        easing: "ease-out"
+      }
+    );
+
+    // Click event to isolate color
+    ball.addEventListener("click", () => isolateColor(ball.style.backgroundColor));
+  }
+}
+
+// Isolate clicked color
+function isolateColor(selectedColor) {
+  balls.forEach(ball => {
+    if (ball.style.backgroundColor !== selectedColor) {
+      ball.style.opacity = 0; // Make other colors disappear
+    } else {
+      ball.style.opacity = 1; // Keep the selected color balls
+    }
+  });
+}
+
+createBalls();
+</script>
+
+</body>
+</html>
